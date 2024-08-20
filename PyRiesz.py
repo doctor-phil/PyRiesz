@@ -44,7 +44,8 @@ class RieszNet(nn.Module): # following the specification from Chernozhukov et al
 # from Schrimpf & Solimine working paper
 def m_avg_derivative(Y, X, g, i):
     """
-    Returns the moment function m(Y,X,alpha) = dY / dX_i where E[Y|X] = g(X)
+    Returns the moment function m(Y,X,alpha,i) = dY / dX_i where E[Y|X] = g(X)
+    In order to use this, will need to fix i in a lambda function
     """
     output = torch.exp(g(X))
     n = len(Y)
