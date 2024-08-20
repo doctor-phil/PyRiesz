@@ -64,7 +64,7 @@ def riesz_net_loss(Y, X, eps, riesznet, m, lambda1=0.1, lambda2=1., lambda3=1e-3
     mse = nn.MSELoss()
     alpha = lambda X: riesznet(X)[0]
     g = lambda X: riesznet(X)[1]
-    RRLoss = (1/len(Y)) * torch.sum((alpha(X)**2) - (2*m(Y,X,alpha))) # need to double check that m(Y,X,alpha) is right, if alpha=alpha(X)
+    RRLoss = (1/len(Y)) * torch.sum((alpha(X)**2) - (2*m(Y,X,alpha)))
     REGLoss = mse(Y, g(X))
     TMLELoss = mse(Y - g(X), eps*alpha(X))
     RLoss = sum(p.pow(2).sum() for p in riesznet.parameters())
