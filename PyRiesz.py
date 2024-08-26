@@ -9,12 +9,12 @@ class RieszNet(nn.Module): # following the specification from Chernozhukov et al
         super(RieszNet, self).__init__()
         self.first_layer = nn.Linear(d, k1)
         if hidden_layers1 is None:
-            self.hidden_layers1 = [nn.Linear(k1, k1) for _ in range(num_layers1)]
+            self.hidden_layers1 = nn.ModuleList([nn.Linear(k1, k1) for _ in range(num_layers1)])
         else:
             self.hidden_layers1 = hidden_layers1
         self.transition_layer = nn.Linear(k1, k2)
         if hidden_layers2 is None:
-            self.hidden_layers2 = [nn.Linear(k2, k2) for _ in range(num_layers2)]
+            self.hidden_layers2 = nn.ModuleList([nn.Linear(k2, k2) for _ in range(num_layers2)])
         else:
             self.hidden_layers2 = hidden_layers2
         self.output_alpha = nn.Linear(k1, 1)
