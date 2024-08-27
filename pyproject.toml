@@ -1,0 +1,22 @@
+[build-system]
+requires = ["hatchling", "numpy<2", "torch", "torchvision"]
+build-backend = "hatchling.build"
+
+[project]
+name = "PyRiesz"
+version = "0.0.1"
+authors = [
+  { name="Philip Solimine", email="philipsolimine@gmail.com" },
+]
+description = "Pytorch implementation of the multitasking RieszNet architecture for Auto-DML doubly-robust estimation of causal effects"
+readme = "README.md"
+requires-python = ">=3.8"
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+]
+
+[project.urls]
+Homepage = "https://github.com/doctor-phil/pyriesz"
+Issues = "https://github.com/doctor-phil/pyriesz/issues"
