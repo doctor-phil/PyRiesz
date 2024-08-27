@@ -1,5 +1,5 @@
 [build-system]
-requires = ["hatchling", "numpy", "torch", "torchvision"]
+requires = ["hatchling", "numpy<2", "torch", "torchvision"]
 build-backend = "hatchling.build"
 
 [project]
