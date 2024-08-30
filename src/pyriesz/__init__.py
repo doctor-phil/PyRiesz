@@ -23,7 +23,7 @@ class RieszNet(nn.Module): # following the specification from Chernozhukov et al
             hidden_layers2: list of hidden layers for the nuisance function g, allowing for more flexible descriptions of the output layers
                 Defaults to None, in which case the hidden layers are all linear transformations using k2 nodes.
                 If specified, num_layers_output and k2 will be ignored
-            activation: activation function used for all hidden layers
+            activation: activation function used for all hidden layers (defaults to ReLU)
         """
         super(RieszNet, self).__init__()
         self.first_layer = nn.Linear(d, k1)
