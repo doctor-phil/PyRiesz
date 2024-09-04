@@ -5,7 +5,7 @@ import torch.optim as optim
 
 
 class RieszNet(nn.Module): # following the specification from Chernozhukov et al. (2022) PMLR
-    def __init__(self, d, k1 = 2*d, k2 = d//2, num_layers_representation = 1, num_layers_output = 1, hidden_layers1 = None, hidden_layers2 = None, activation=torch.relu):
+    def __init__(self, d, k1 = None, k2 = None, num_layers_representation = 1, num_layers_output = 1, hidden_layers1 = None, hidden_layers2 = None, activation=torch.relu):
         """
         Initializes the RieszNet model.
 
@@ -23,9 +23,19 @@ class RieszNet(nn.Module): # following the specification from Chernozhukov et al
             hidden_layers2: list of hidden layers for the nuisance function g, allowing for more flexible descriptions of the output layers
                 Defaults to None, in which case the hidden layers are all linear transformations using k2 nodes.
                 If specified, num_layers_output and k2 will be ignored
-            activation: activation function used for all hidden layers (defaults to ReLU)
+            activation: activation function used for all hidden layers (defaults to ReLU) OR an iterable collection of activation functions for each layer
         """
         super(RieszNet, self).__init__()
+        if k1 is None and hidden_layers1 is None:
+            k1 = 2*d
+        elif k1 is None and hidden_layers1 is not None:
+            k1 = hidden_layers1[0].in_features
+
+        if k2 is None and hidden_layers2 is None:
+            k2 = d//2
+        elif k2 is None and hidden_layers2 is not None:
+            k2 = hidden_layers2[0].in_features
+
         self.first_layer = nn.Linear(d, k1)
         if hidden_layers1 is None:
             self.hidden_layers1 = nn.ModuleList([nn.Linear(k1, k1) for _ in range(num_layers_representation)])
@@ -36,21 +46,25 @@ class RieszNet(nn.Module): # following the specification from Chernozhukov et al
             self.hidden_layers2 = nn.ModuleList([nn.Linear(k2, k2) for _ in range(num_layers_output)])
         else:
             self.hidden_layers2 = hidden_layers2
+        
         self.output_alpha = nn.Linear(k1, 1)
         self.output_g = nn.Linear(k2, 1)
         self.layer1 = num_layers_representation # number of layers for both alpha and g
         self.layer2 = num_layers_output # number of layers for just g, after the split
-        self.activation = activation
+        if hasattr(activation, '__iter__'):
+            self.activation = nn.ModuleList(activation)
+        else:
+            self.activation = nn.ModuleList([activation for _ in range(num_layers_representation + num_layers_output)])
 
     def forward(self, x):
         x = self.activation(self.first_layer(x))
-        for i in range(self.l1):
-            x = self.activation(self.hidden_layers1[i](x))
+        for i in range(self.layer1):
+            x = self.activation[i](self.hidden_layers1[i](x))
         alpha = self.output_alpha(x)
 
-        x = self.activation(self.transition_layer(x))
-        for i in range(self.l2):
-            x = self.activation(self.hidden_layers2[i](x))
+        x = self.activation[self.layer1](self.transition_layer(x))
+        for i in range(self.layer2):
+            x = self.activation[self.layer1 + i + 1](self.hidden_layers2[i](x))
         g = self.output_g(x)
 
         return alpha, g
