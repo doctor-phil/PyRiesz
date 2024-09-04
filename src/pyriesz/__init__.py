@@ -5,7 +5,7 @@ import torch.optim as optim
 
 
 class RieszNet(nn.Module): # following the specification from Chernozhukov et al. (2022) PMLR
-    def __init__(self, d, k1 = None, k2 = None, num_layers_representation = 1, num_layers_output = 1, hidden_layers1 = None, hidden_layers2 = None, activation=torch.relu):
+    def __init__(self, d, k1 = d//2, k2 = d//2, num_layers_representation = 1, num_layers_output = 1, hidden_layers1 = None, hidden_layers2 = None, activation=torch.relu):
         """
         Initializes the RieszNet model.
 
