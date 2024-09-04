@@ -80,7 +80,7 @@ m_deriv_first_arg = lambda Y, X, g: m_derivative(Y,X,g,0) # specific moment func
 #####################
 # define the riesznet loss functions
 
-def riesz_net_loss(Y, X, eps, riesznet, m, lambda1=0.1, lambda2=1., lambda3=1e-3, lambda4=1e-3):
+def riesz_net_loss(Y, X, eps, riesznet, m, rr_loss_weight=0.1, tmle_loss_weight=1., l2_weight=1e-3, l1_weight=1e-3):
     """
     Returns the loss function from RieszNet (Chernozhukov et al. 2022)
 
@@ -92,10 +92,10 @@ def riesz_net_loss(Y, X, eps, riesznet, m, lambda1=0.1, lambda2=1., lambda3=1e-3
         m: moment function m(Y,X,alpha) where alpha is the output of the RieszNet model
     
     Optional arguments:
-        lambda1: regularization parameter for the Riesz representer loss (defaults to 0.1)
-        lambda2: regularization parameter for the TML estimator loss (defaults to 1)
-        lambda3: regularization parameter for the L2 norm of the RieszNet parameters, except for epsilon (defaults to 0.001
-        lambda4: regularization parameter for the L1 norm of the RieszNet parameters, except for epsilon (defaults to 0.001)
+        rr_loss_weight: regularization parameter for the Riesz representer loss (defaults to 0.1)
+        tmle_loss_weight: regularization parameter for the TML estimator loss (defaults to 1)
+        l2_weight: regularization parameter for the L2 norm of the RieszNet parameters, except for epsilon (defaults to 0.001
+        l1_weight: regularization parameter for the L1 norm of the RieszNet parameters, except for epsilon (defaults to 0.001)
     """
     mse = nn.MSELoss()
     alpha = lambda X: riesznet(X)[0]
