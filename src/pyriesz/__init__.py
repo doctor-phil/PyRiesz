@@ -5,7 +5,7 @@ import torch.optim as optim
 
 
 class RieszNet(nn.Module): # following the specification from Chernozhukov et al. (2022) PMLR
-    def __init__(self, d, k1 = d//2, k2 = d//4, num_layers_representation = 1, num_layers_output = 1, hidden_layers1 = None, hidden_layers2 = None, activation=torch.relu):
+    def __init__(self, d, k1 = 2*d, k2 = d//2, num_layers_representation = 1, num_layers_output = 1, hidden_layers1 = None, hidden_layers2 = None, activation=torch.relu):
         """
         Initializes the RieszNet model.
 
@@ -13,10 +13,10 @@ class RieszNet(nn.Module): # following the specification from Chernozhukov et al
             d: number of input features
             
         Optional arguments:
-            k1: number of nodes in each layer before the split, with the last layer being the latent representation used to estimate alpha (defaults to k1=d)
-            k2: number of units in the second layer, after the split, used to estimate the nuisance function g (defaults to k2= d/2)
-            num_layers1: number of layers before the split (defaults to 1)
-            num_layers2: number of layers after the split, used to estimate g (defaults to 1)
+            k1: number of nodes in each layer before the split, with the last layer being the latent representation used to estimate alpha (defaults to k1=2d)
+            k2: number of units in the second layer, after the split, used to estimate the nuisance function g (defaults to k2= d//2)
+            num_layers_representation: number of layers before the split (defaults to 1)
+            num_layers_output: number of layers after the split, used to estimate g (defaults to 1)
             hidden_layers1: list of hidden layers for the latent representation, allowing for more flexible descriptions of the representation layers
                 Defaults to None, in which case the hidden layers are all linear transformations using k1 nodes.
                 If specified, num_layers_representation and k1 will be ignored
