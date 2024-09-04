@@ -59,8 +59,7 @@ class RieszNet(nn.Module): # following the specification from Chernozhukov et al
 #####################
 # define some moment functions
 
-# example moment function for average derivative estimator of exp(g(X)) with respect to input X_i
-# from Schrimpf & Solimine working paper
+# example moment function for average derivative estimator
 def m_derivative(Y, X, g, i):
     """
     Returns the moment function m(Y,X,alpha,i) = dY / dX_i where E[Y|X] = g(X)
