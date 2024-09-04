@@ -105,7 +105,7 @@ def riesz_net_loss(Y, X, eps, riesznet, m, rr_loss_weight=0.1, tmle_loss_weight=
     TMLELoss = mse(Y - g(X), eps*alpha(X))
     L2Loss = sum(p.pow(2).sum() for p in riesznet.parameters())
     L1Loss = sum(p.abs().sum() for p in riesznet.parameters())
-    return REGLoss + lambda1*RRLoss + lambda2*TMLELoss + lambda3*L2Loss + lambda4*L1Loss
+    return REGLoss + rr_loss_weight*RRLoss + tmle_loss_weight*TMLELoss + l2_weight*L2Loss + l1_weight*L1Loss
 
 
 #####################
