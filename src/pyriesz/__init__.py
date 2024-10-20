@@ -83,7 +83,6 @@ class RieszNet(nn.Module): # following the specification from Chernozhukov et al
             printevery: print the loss every printevery epochs
         """
         optimizer = optim.Adam(self.parameters(), lr=lr)
-        mse = nn.MSELoss()
         for epoch in range(epochs):
             optimizer.zero_grad()
             loss = riesz_net_loss(y, X, eps, self, m)
