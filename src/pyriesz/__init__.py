@@ -68,7 +68,29 @@ class RieszNet(nn.Module): # following the specification from Chernozhukov et al
         g = self.output_g(x)
 
         return alpha, g
+    
+    def fit(self, X, y, m, eps, epochs=1000, lr=1e-3, printevery=100):
+        """
+        Fits the RieszNet model to the data.
 
+        Parameters:
+            X: input data
+            y: output data
+
+        Optional arguments:
+            epochs: number of epochs to train the model (defaults to 1000)
+            lr: learning rate for the optimizer (defaults to 1e-3)
+            printevery: print the loss every printevery epochs
+        """
+        optimizer = optim.Adam(self.parameters(), lr=lr)
+        mse = nn.MSELoss()
+        for epoch in range(epochs):
+            optimizer.zero_grad()
+            loss = riesz_net_loss(y, X, eps, self, m)
+            loss.backward()
+            optimizer.step()
+            if epoch % printevery == 0:
+                print(f'epoch {epoch}, loss {loss.item()}')
 
 #####################
 # define some moment functions
