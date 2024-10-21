@@ -5,7 +5,7 @@ import torch.optim as optim
 
 
 class RieszNet(nn.Module): # following the specification from Chernozhukov et al. (2022) PMLR
-    def __init__(self, d, k1 = None, k2 = None, num_layers_representation = 1, num_layers_output = 1, hidden_layers1 = None, hidden_layers2 = None, activation=torch.relu, l1reg = 1e-5, l2reg=1e-5):
+    def __init__(self, d, k1 = None, k2 = None, num_layers_representation = 1, num_layers_output = 1, hidden_layers1 = None, hidden_layers2 = None, activation=torch.relu, l1reg = 1e-5, l2reg=1e-5, rr_loss_weight=0.1, tmle_loss_weight=1.):
         """
         Initializes the RieszNet model.
 
@@ -48,6 +48,8 @@ class RieszNet(nn.Module): # following the specification from Chernozhukov et al
             self.hidden_layers2 = hidden_layers2
         self.l1reg = l1reg
         self.l2reg = l2reg
+        self.tmle_loss_weight = tmle_loss_weight
+        self.rr_loss_weight = rr_loss_weight
         self.eps = torch.tensor(1.0, dtype=torch.float32) # what should it be initialized to?
         self.output_alpha = nn.Linear(k1, 1)
         self.output_g = nn.Linear(k2, 1)
@@ -87,7 +89,7 @@ class RieszNet(nn.Module): # following the specification from Chernozhukov et al
         optimizer = optim.Adam(self.parameters(), lr=lr)
         for epoch in range(epochs):
             optimizer.zero_grad()
-            loss = riesz_net_loss(y, X, self.eps, self, m)
+            loss = riesz_net_loss(y, X, self.eps, self, m, self.rr_loss_weight, self.tmle_loss_weight, self.l1reg, self.l2reg)
             loss.backward()
             optimizer.step()
             if epoch % printevery == 0:
