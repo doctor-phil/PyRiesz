@@ -4,7 +4,7 @@ import torch.optim as optim
 
 
 #####################
-# alternative, estimate Riesz representer using LASSO method from Chernozhukov et al. (2022) ECMA
+# Estimate Riesz representer using LASSO method from Chernozhukov et al. (2022) ECMA
 
 def e(i,k):
     """
