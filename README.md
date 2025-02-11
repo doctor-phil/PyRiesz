@@ -6,3 +6,6 @@ Implements the multitask learning RieszNet architecture from [Chernozhukov, Newe
 ## Installation
 Install using
 `pip install pyriesz`
+
+## Documentation
+Documentation for the key methods is available [here](https://nbviewer.org/github/doctor-phil/PyRiesz/blob/main/src/pyriesz/__init__.html)
