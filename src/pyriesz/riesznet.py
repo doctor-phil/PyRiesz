@@ -65,4 +65,3 @@ class RieszNet(nn.Module): # following the specification from Chernozhukov et al
         g = self.output_g(x)
 
         return alpha, g
-
